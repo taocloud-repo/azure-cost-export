@@ -298,8 +298,29 @@ Write-Host "`nExportando para CSV..." -ForegroundColor Cyan
 $rgCsvPath = "$OutputPath`_ResourceGroups.csv"
 $resourceCsvPath = "$OutputPath`_Resources.csv"
 
-$rgData | Export-Csv -Path $rgCsvPath -NoTypeInformation -Encoding UTF8
-$resourceData | Export-Csv -Path $resourceCsvPath -NoTypeInformation -Encoding UTF8
+# Ajustar formato numérico para Excel (usar ponto como decimal)
+$rgDataFormatted = $rgData | ForEach-Object {
+    [PSCustomObject]@{
+        ResourceGroup = $_.ResourceGroup
+        Custo = [string]$_.Custo.ToString("0.00", [System.Globalization.CultureInfo]::InvariantCulture)
+        Moeda = $_.Moeda
+    }
+}
+
+$resourceDataFormatted = $resourceData | ForEach-Object {
+    [PSCustomObject]@{
+        NomeDoRecurso = $_.NomeDoRecurso
+        ResourceGroup = $_.ResourceGroup
+        Tipo = $_.Tipo
+        Location = $_.Location
+        Custo = [string]$_.Custo.ToString("0.00", [System.Globalization.CultureInfo]::InvariantCulture)
+        Moeda = $_.Moeda
+        ResourceID = $_.ResourceID
+    }
+}
+
+$rgDataFormatted | Export-Csv -Path $rgCsvPath -NoTypeInformation -Encoding UTF8
+$resourceDataFormatted | Export-Csv -Path $resourceCsvPath -NoTypeInformation -Encoding UTF8
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
