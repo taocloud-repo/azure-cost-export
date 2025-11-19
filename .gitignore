@@ -1,0 +1,32 @@
+# Azure Cost Export Tool - .gitignore
+
+# Arquivos Excel gerados
+*.xlsx
+*.xls
+
+# Logs
+*.log
+
+# Arquivos temporários do PowerShell
+*.tmp
+*.temp
+
+# Arquivos de credenciais (NUNCA commitar!)
+*credentials*
+*secrets*
+*.env
+config.json
+
+# Diretórios do Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Arquivos do sistema Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# PowerShell
+*.ps1~
+*.psm1~
