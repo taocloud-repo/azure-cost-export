@@ -12,16 +12,18 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory = $false)]
-    [string]$SubscriptionId,
+    [string]$SubscriptionId = "",
 
     [Parameter(Mandatory = $false)]
-    [string]$OutputPath,
+    [string]$OutputPath = "",
 
     [Parameter(Mandatory = $false)]
-    [DateTime]$StartDate,
+    [AllowNull()]
+    [Nullable[DateTime]]$StartDate = $null,
 
     [Parameter(Mandatory = $false)]
-    [DateTime]$EndDate
+    [AllowNull()]
+    [Nullable[DateTime]]$EndDate = $null
 )
 
 Write-Host "========================================" -ForegroundColor Cyan
@@ -50,7 +52,7 @@ Write-Host "  Conta: $($context.Account.Id)" -ForegroundColor Gray
 Write-Host "  Subscription: $($context.Subscription.Name)" -ForegroundColor Gray
 
 # Selecionar subscription se não fornecida
-if (-not $SubscriptionId) {
+if ([string]::IsNullOrEmpty($SubscriptionId)) {
     $SubscriptionId = $context.Subscription.Id
 
     $change = Read-Host "`nUsar esta subscription? (S/N)"
@@ -76,7 +78,7 @@ if (-not $SubscriptionId) {
 }
 
 # Selecionar período
-if (-not $StartDate -or -not $EndDate) {
+if ($null -eq $StartDate -or $null -eq $EndDate) {
     Write-Host "`n========================================" -ForegroundColor Cyan
     Write-Host "  Seleção de Período" -ForegroundColor Cyan
     Write-Host "========================================" -ForegroundColor Cyan
@@ -125,7 +127,7 @@ if (-not $StartDate -or -not $EndDate) {
 Write-Host "`nPeríodo: $($StartDate.ToString('dd/MM/yyyy')) até $($EndDate.ToString('dd/MM/yyyy'))" -ForegroundColor Cyan
 
 # Definir output path
-if (-not $OutputPath) {
+if ([string]::IsNullOrEmpty($OutputPath)) {
     $timestamp = Get-Date -Format "yyyyMMdd_HHmmss"
     if ($isCloudShell) {
         $OutputPath = "~/clouddrive/AzureCosts_$timestamp"
